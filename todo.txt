@@ -1,0 +1,11 @@
+ajout de minimizeonstartup
+l150
+
+l760 : lancement de l'appli, il faut minimizer ici
+
+fair afficher batterie + charge + status dans le tooltip de la tray icon
+
+//----------------------------------------//
+faire marcher l'option de re-conenct auto
+
+idem bouton "reconnection" l821
