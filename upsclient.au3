@@ -4,7 +4,7 @@
 #AutoIt3Wrapper_Compression=4
 #AutoIt3Wrapper_Res_Comment=Windows NUT Client
 #AutoIt3Wrapper_Res_Description=WinNutClient
-#AutoIt3Wrapper_Res_Fileversion=1.6.1.0
+#AutoIt3Wrapper_Res_Fileversion=1.6.2.0
 #AutoIt3Wrapper_Res_LegalCopyright=Freeware
 #AutoIt3Wrapper_Res_Language=1033
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
@@ -577,7 +577,8 @@ Func Update()
 	UpdateValue($needle3 , $inputFreq , $inputf , $dial3 , getOption("mininputf") , getOption("maxinputf") )
 	rePaint()
 	;if connection to UPS is in fact alive and charge below shutdown setting and ups is not online
-	if ($battch <  GetOption("shutdownpc")) and ($upsstatus <>  "OL" and $socket <> 0) Then
+	;add different from status 0 when UPS not connected but NUT is running
+	if ($battch <  GetOption("shutdownpc")) and ($upsstatus <>  "0") and ($upsstatus <>  "OL" and $socket <> 0) Then
 		Shutdown(13) ;Shutdown PC if battery charge lower then given percentage and UPS offline
 	EndIf
 EndFunc
@@ -727,7 +728,7 @@ Func aboutGui()
 	$GroupBox1 = GUICtrlCreateGroup("", 8, 8, 305, 185)
 	$Image1 = GUICtrlCreatePic(@ScriptDir & "\ups.jpg", 16, 24, 105, 97, BitOR($SS_NOTIFY,$WS_GROUP))
 	$Label10 = GUICtrlCreateLabel("WinNutClient", 152, 24, 72, 17, $WS_GROUP)
-	$Label12 = GUICtrlCreateLabel("Version 1.6.1", 152, 48, 100, 17, $WS_GROUP)
+	$Label12 = GUICtrlCreateLabel("Version 1.6.2", 152, 48, 100, 17, $WS_GROUP)
 	$Label14 = GUICtrlCreateLabel("Windows NUT Client", 16, 160, 170, 17, $WS_GROUP)
 	$Label13 = GUICtrlCreateLabel("Copyright Michael Liberman 2006-2007", 16, 136, 270, 17, $WS_GROUP)
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
