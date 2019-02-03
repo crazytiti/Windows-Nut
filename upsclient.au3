@@ -551,36 +551,37 @@ Func Update()
 		ResetGui()
 		Return
 	EndIf
-
-	if $upsstatus == "OL" Then
-		SetColor($green , $wPanel , $upsonline )
-		SetColor(0xffffff , $wPanel , $upsonbatt )
-	Else
-		SetColor($yellow , $wPanel , $upsonbatt )
-		SetColor(0xffffff , $wPanel , $upsonline )
-	EndIf
-	if $upsLoad > 100 Then
-		SetColor($red , $wPanel , $upsoverload )
-	Else
-		SetColor(0xffffff , $wPanel , $upsoverload )
-	EndIf
-	if $battCh < 40 Then
-		SetColor($red , $wPanel , $upslowbatt )
-	Else
-		SetColor(0xffffff , $wPanel , $upslowbatt )
-	EndIf
-	UpdateValue($needle4 , $battVol , $battv , $dial4 , getOption("minbattv") , getOption("maxbattv") )
-	UpdateValue($needle5 , $upsLoad , $upsl , $dial5 , getOption("minupsl") , getOption("maxupsl") )
-	UpdateValue($needle6 , $battCh , $upsch , $dial6 , 0 , 100 )
-	UpdateValue($needle1 , $inputVol, $inputv , $dial1 ,getOption("mininputv") , getOption("maxinputv"))
-	UpdateValue($needle2 , $outputVol, $outputv , $dial2 , getOption("minoutputv") , getOption("maxoutputv"))
-	UpdateValue($needle3 , $inputFreq , $inputf , $dial3 , getOption("mininputf") , getOption("maxinputf") )
-	rePaint()
+   if (WinGetState ($gui) = 15) Then	;only refresh if windows is showed (refresh make stutters in graphical demanding application like games)
+	   if $upsstatus == "OL" Then
+		   SetColor($green , $wPanel , $upsonline )
+		   SetColor(0xffffff , $wPanel , $upsonbatt )
+	   Else
+		   SetColor($yellow , $wPanel , $upsonbatt )
+		   SetColor(0xffffff , $wPanel , $upsonline )
+	   EndIf
+	   if $upsLoad > 100 Then
+		   SetColor($red , $wPanel , $upsoverload )
+	   Else
+		   SetColor(0xffffff , $wPanel , $upsoverload )
+	   EndIf
+	   if $battCh < 40 Then
+		   SetColor($red , $wPanel , $upslowbatt )
+	   Else
+		   SetColor(0xffffff , $wPanel , $upslowbatt )
+	   EndIf
+	   UpdateValue($needle4 , $battVol , $battv , $dial4 , getOption("minbattv") , getOption("maxbattv") )
+	   UpdateValue($needle5 , $upsLoad , $upsl , $dial5 , getOption("minupsl") , getOption("maxupsl") )
+	   UpdateValue($needle6 , $battCh , $upsch , $dial6 , 0 , 100 )
+	   UpdateValue($needle1 , $inputVol, $inputv , $dial1 ,getOption("mininputv") , getOption("maxinputv"))
+	   UpdateValue($needle2 , $outputVol, $outputv , $dial2 , getOption("minoutputv") , getOption("maxoutputv"))
+	   UpdateValue($needle3 , $inputFreq , $inputf , $dial3 , getOption("mininputf") , getOption("maxinputf") )
+	   rePaint()
+    Endif
 	;if connection to UPS is in fact alive and charge below shutdown setting and ups is not online
 	;add different from status 0 when UPS not connected but NUT is running
 	if ($battch <  GetOption("shutdownpc")) and ($upsstatus <>  "0") and ($upsstatus <>  "OL" and $socket <> 0) Then
 		Shutdown(13) ;Shutdown PC if battery charge lower then given percentage and UPS offline
-	EndIf
+	 EndIf
 EndFunc
 
 
