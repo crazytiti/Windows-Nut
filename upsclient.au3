@@ -4,7 +4,7 @@
 #AutoIt3Wrapper_Compression=4
 #AutoIt3Wrapper_Res_Comment=Windows NUT Client
 #AutoIt3Wrapper_Res_Description=WinNutClient
-#AutoIt3Wrapper_Res_Fileversion=1.6.2.0
+#AutoIt3Wrapper_Res_Fileversion=1.6.3.0
 #AutoIt3Wrapper_Res_LegalCopyright=Freeware
 #AutoIt3Wrapper_Res_Language=1033
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
