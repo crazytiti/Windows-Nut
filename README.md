@@ -4,6 +4,8 @@ remix from the original by Michael Liberman 2006-2007 matrix200 http://sourcefor
 <br>
 This is a NUT windows client for simple ups monitoring and auto shutdown.<br>
 <br>
+!(https://raw.githubusercontent.com/crazytiti/Windows-Nut/master/win-nut.png)
+<br>
 Changelog :<br>
 1.6.3<br>
 Only refresh windows when showed.<br>
