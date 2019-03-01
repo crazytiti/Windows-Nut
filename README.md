@@ -9,7 +9,7 @@ This is a NUT windows client for simple ups monitoring and auto shutdown.<br>
 You need NUT to use this tool
 https://networkupstools.org/
 <br>
-http://www.networkupstools.org/package/windows/NUT-Installer-2.6.5-6.msi
+http://www.networkupstools.org/package/windows/NUT-Installer-2.6.5-4.msi
 <br>
 Changelog :<br>
 1.6.3<br>
