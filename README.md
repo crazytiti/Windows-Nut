@@ -13,8 +13,8 @@ http://www.networkupstools.org/package/windows/NUT-Installer-2.6.5-4.msi
 <br>
 Changelog :<br>
 1.6.4<br>
-Added battery temperature.
-Change Input frequency to Output frequency, because my new UPS have this and not that.
+Added battery temperature.<br>
+Change Input frequency to Output frequency, because my new UPS have this and not that.<br>
 1.6.3<br>
 Only refresh windows when showed.<br>
 Refreshing cause micro stuttering in graphical demanding apps like games so use it "minimise"<br>
