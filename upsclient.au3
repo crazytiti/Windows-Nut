@@ -4,7 +4,7 @@
 #AutoIt3Wrapper_Compression=4
 #AutoIt3Wrapper_Res_Comment=Windows NUT Client
 #AutoIt3Wrapper_Res_Description=WinNutClient
-#AutoIt3Wrapper_Res_Fileversion=1.6.3.0
+#AutoIt3Wrapper_Res_Fileversion=1.6.4.0
 #AutoIt3Wrapper_Res_LegalCopyright=Freeware
 #AutoIt3Wrapper_Res_Language=1033
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
@@ -61,6 +61,7 @@ Global $mfr = ""
 Global $name = ""
 Global $serial = ""
 Global $firmware = ""
+Global $temperature = ""
 
 Global $TreeView1
 Global $varselected
@@ -70,7 +71,7 @@ Global $vardesc
 Global $settingssubMenu,$exitMenu,$editMenu,$aboutMenu,$reconnectMenu,$listvarMenu
 
 Global $guipref = 0
-Global $upsmfr,$upsmodel,$upsserial,$upsfirmware,$toolb,$exitb
+Global $upsmfr,$upsmodel,$upsserial,$upsfirmware,$upstemperature,$toolb,$exitb
 
 Global $wPanel = 0
 
@@ -136,7 +137,7 @@ Func prefGui()
 
 	GUICtrlCreateTabItem("Calibration")
 	GUICtrlCreateLabel("Input Voltage", 16, 56, 75, 17, BitOR($SS_BLACKRECT,$SS_GRAYFRAME,$SS_LEFTNOWORDWRAP))
-	GUICtrlCreateLabel("Input Frequency", 16, 96, 91, 17, BitOR($SS_BLACKRECT,$SS_GRAYFRAME,$SS_LEFTNOWORDWRAP))
+	GUICtrlCreateLabel("Output Frequency", 16, 96, 91, 17, BitOR($SS_BLACKRECT,$SS_GRAYFRAME,$SS_LEFTNOWORDWRAP))
 	GUICtrlCreateLabel("Output Voltage", 16, 136, 91, 17, BitOR($SS_BLACKRECT,$SS_GRAYFRAME,$SS_LEFTNOWORDWRAP))
 	GUICtrlCreateLabel("UPS Load", 16, 176, 91, 17, BitOR($SS_BLACKRECT,$SS_GRAYFRAME,$SS_LEFTNOWORDWRAP))
 	GUICtrlCreateLabel("Battery Voltage", 16, 216, 91, 17, BitOR($SS_BLACKRECT,$SS_GRAYFRAME,$SS_LEFTNOWORDWRAP))
@@ -395,6 +396,7 @@ Func GetUPSInfo()
 	$name = ""
 	$serial = ""
 	$firmware = ""
+	$temperature = ""
 	if $socket == 0 Then ; not connected to server/connection lost
 		Return
 	EndIf
@@ -438,7 +440,16 @@ Func GetUPSInfo()
 			Return
 		EndIf
 		$firmware =""
-	EndIf
+	 EndIf
+
+    $status = GetUPSVar(GetOption("upsname") ,"battery.temperature" , $temperature)
+	if $status = -1 then
+		if $socket == 0 Then
+			Return
+		EndIf
+		$temperature =""
+	 EndIf
+
 
 EndFunc
 
@@ -449,11 +460,13 @@ Func SetUPSInfo()
 		$name = ""
 		$serial = ""
 		$firmware = ""
+		$temperature = ""
 	EndIf
 	GuiCtrlSetData($upsmfr,$mfr)
 	GuiCtrlSetData($upsmodel,$name)
 	GuiCtrlSetData($upsserial,$serial)
 	GuiCtrlSetData($upsfirmware,$firmware)
+	GuiCtrlSetData($upstemperature,$temperature)
 
 EndFunc
 
@@ -467,7 +480,7 @@ Func GetData()
 	EndIf
 	GetUPSVar($ups_name ,"battery.charge" , $battch)
 	GetUPSVar($ups_name ,"battery.voltage",$battVol)
-	GetUPSVar($ups_name ,"input.frequency",$inputFreq)
+	GetUPSVar($ups_name ,"output.frequency",$inputFreq)
 	GetUPSVar($ups_name ,"input.voltage",$inputVol)
 	GetUPSVar($ups_name ,"output.voltage",$outputVol)
 	GetUPSVar($ups_name ,"ups.load",$upsLoad)
@@ -696,6 +709,11 @@ Func OpenMainWindow($windowsstate)
 	GUICtrlSetFont(-1, 8, 400, 0, "MS SansSerif")
 	$Label16 = GUICtrlCreateLabel("Firmware :", 8, 277 - 70, 51, 17,Bitor($SS_LEFTNOWORDWRAP,$GUI_SS_DEFAULT_LABEL))
 	GUICtrlSetFont(-1, 8, 400, 0, "MS SansSerif")
+    $Label17 = GUICtrlCreateLabel("Temp°c :", 8, 302 - 70, 51, 17,Bitor($SS_LEFTNOWORDWRAP,$GUI_SS_DEFAULT_LABEL))
+	GUICtrlSetFont(-1, 8, 400, 0, "MS SansSerif")
+    $upstemperature = GUICtrlCreateLabel("Temp°c :", 62, 302 - 70, 51, 17,Bitor($SS_LEFTNOWORDWRAP,$GUI_SS_DEFAULT_LABEL))
+	GUICtrlSetFont(-1, 8, 800, 0, "MS SansSerif")
+
 	;$wPanel = GUICtrlCreateGroup("", 0, 70, 130 + 25, 240)
 	GuiSwitch($gui)
 	$Group8 = GUICreate("", 638, 60,0, 0,BitOR($WS_CHILD, $WS_BORDER), 0, $gui)
@@ -710,7 +728,7 @@ Func OpenMainWindow($windowsstate)
 	$calc = 1 / ((GetOption("maxoutputv") - GetOption("minoutputv")) / 100 )
 	$dial2 = DrawDial(480, 70 , GetOption("minoutputv") , "Output Voltage" , "V" , $outputv , $needle2 , $calc)
 	$calc = 1 / ((GetOption("maxinputf") - GetOption("mininputf")) / 100 )
-	$dial3 = DrawDial(320, GetOption("maxinputf") , GetOption("mininputf") , "Input Frequency" , "Hz" , $inputf , $needle3 , $calc )
+	$dial3 = DrawDial(320, GetOption("maxinputf") , GetOption("mininputf") , "Output Frequency" , "Hz" , $inputf , $needle3 , $calc )
 	$calc = 1 / ((GetOption("maxbattv") - GetOption("minbattv")) / 100 )
 	$dial4 = DrawDial(480, 200 , 0 , "Battery Voltage" , "V" , $battv , $needle4 , $calc , 20 , 120)
 	$calc = 1 / ((GetOption("maxupsl") - GetOption("minupsl")) / 100 )
@@ -729,7 +747,7 @@ Func aboutGui()
 	$GroupBox1 = GUICtrlCreateGroup("", 8, 8, 305, 185)
 	$Image1 = GUICtrlCreatePic(@ScriptDir & "\ups.jpg", 16, 24, 105, 97, BitOR($SS_NOTIFY,$WS_GROUP))
 	$Label10 = GUICtrlCreateLabel("WinNutClient", 152, 24, 72, 17, $WS_GROUP)
-	$Label12 = GUICtrlCreateLabel("Version 1.6.2", 152, 48, 100, 17, $WS_GROUP)
+	$Label12 = GUICtrlCreateLabel("Version 1.6.4", 152, 48, 100, 17, $WS_GROUP)
 	$Label14 = GUICtrlCreateLabel("Windows NUT Client", 16, 160, 170, 17, $WS_GROUP)
 	$Label13 = GUICtrlCreateLabel("Copyright Michael Liberman 2006-2007", 16, 136, 270, 17, $WS_GROUP)
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
@@ -822,7 +840,7 @@ func mainLoop()
 			$calc = 1 / ((GetOption("maxoutputv") - GetOption("minoutputv")) / 100 )
 			$dial2 = DrawDial(480, 70 , GetOption("minoutputv") , "Output Voltage" , "V" , $outputv , $needle2 , $calc)
 			$calc = 1 / ((GetOption("maxinputf") - GetOption("mininputf")) / 100 )
-			$dial3 = DrawDial(320, GetOption("maxinputf") , GetOption("mininputf") , "Input Frequency" , "Hz" , $inputf , $needle3 , $calc )
+			$dial3 = DrawDial(320, GetOption("maxinputf") , GetOption("mininputf") , "Output Frequency" , "Hz" , $inputf , $needle3 , $calc )
 			$calc = 1 / ((GetOption("maxbattv") - GetOption("minbattv")) / 100 )
 			$dial4 = DrawDial(480, 200 , 0 , "Battery Voltage" , "V" , $battv , $needle4 , $calc , 20 , 120)
 			$calc = 1 / ((GetOption("maxupsl") - GetOption("minupsl")) / 100 )
